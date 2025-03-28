@@ -18,15 +18,15 @@ This project consists of three FastAPI-based microservices:
 ### Start All Services
 1. **Start the Business Logic Service** (port `8000`):
    ```bash
-   uvicorn business_logic:app --host 0.0.0.0 --port 8000 --reload
+   uvicorn Business_service.main:app --port 8000
    ```
 2. **Start the Database Service** (port `8001`):
    ```bash
-   uvicorn database:app --host 0.0.0.0 --port 8001 --reload
+   uvicorn Database_service.databasemain:app --port 8001
    ```
 3. **Start the Client Service** (port `8002`):
    ```bash
-   uvicorn client:app --host 0.0.0.0 --port 8002 --reload
+   uvicorn Client_service.clienmain:app --port 8002
    ```
 
 ## Token-Based Authentication (Client Service)
