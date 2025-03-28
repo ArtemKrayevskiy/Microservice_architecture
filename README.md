@@ -26,7 +26,6 @@ This project consists of three FastAPI-based microservices:
    ```
 3. **Start the Client Service** (port `8002`):
    ```bash
-   export APP_TOKEN="YourSuperSecretToken"  # Set authentication token
    uvicorn client:app --host 0.0.0.0 --port 8002 --reload
    ```
 
