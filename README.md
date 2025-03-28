@@ -66,3 +66,12 @@ curl -X POST "http://localhost:8002/classify" \
 - `POST /classify` → Classify text (requires token)
 - `GET /results/{key}` → Fetch classification result (requires token)
 
+## Example of usage 
+
+<img width="647" alt="Знімок екрана 2025-03-28 о 13 30 40" src="https://github.com/user-attachments/assets/ca613765-1990-4562-866a-565dea948956" />
+
+Here we see that we post to classify endpoint text, this returns us the result that given text is spam, now we would like to see if this was saved to ourdatabase:
+
+<img width="603" alt="Знімок екрана 2025-03-28 о 13 32 52" src="https://github.com/user-attachments/assets/6d4c2d66-2461-4c61-852b-b76447210ba2" />
+
+We see that exactly the same was saved into our database.
