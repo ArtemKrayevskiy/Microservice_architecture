@@ -75,3 +75,17 @@ Here we see that we post to classify endpoint text, this returns us the result t
 <img width="603" alt="Знімок екрана 2025-03-28 о 13 32 52" src="https://github.com/user-attachments/assets/6d4c2d66-2461-4c61-852b-b76447210ba2" />
 
 We see that exactly the same was saved into our database.
+
+# Multi-container setup with podman
+
+I have decided to containerize the business logic and add scheduler. 
+
+In order to start everything you jsut simply have to run the following command(make sure that you don't have the containers running)
+
+```bash
+podman-compose up --build
+```
+
+This will start the apps and in the terminal after 10 seconds you will see something like this:
+
+We can see that each 10 seconds scheduelr sends one of the random phrases to our business_logic service and gets a response

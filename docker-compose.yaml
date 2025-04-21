@@ -1,0 +1,29 @@
+version: '3.12'
+services:
+  web: 
+    build:
+      context: ./business_service  
+      dockerfile: Dockerfile 
+    image: my-fastapi-app-compose:latest
+    container_name: fastapi_web_server
+    ports:
+      - "8000:8000"
+    networks:
+      - app-net
+
+  scheduler:  
+    build:
+      context: ./Scheduler  
+      dockerfile: Dockerfile 
+    image: my-scheduler-app-compose:latest
+    container_name: scheduler_caller
+    environment:
+      TARGET_URL: "http://web:8000/process"
+    depends_on:
+      - web
+    networks:
+      - app-net
+
+networks:
+  app-net:
+    driver: bridge
