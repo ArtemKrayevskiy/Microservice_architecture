@@ -142,9 +142,9 @@ We can see that each 10 seconds scheduelr sends one of the random phrases to our
 
 ## Celery Worker - Asynchronous
 
-# Queue: processing
-# Concurrency: 2 workers
-# Tasks:
+### Queue: processing
+### Concurrency: 2 workers
+### Tasks:
 - process_text_task:
    - Spam classification
    - Personal data detection
@@ -154,6 +154,9 @@ We can see that each 10 seconds scheduelr sends one of the random phrases to our
 On the diagram below you can see the general architecrure of the app:
 
 ![diagram](https://github.com/user-attachments/assets/7d61f94b-8a92-441d-93c4-46603e1f9ee0)
+
+<img src="https://github.com/user-attachments/assets/7d61f94b-8a92-441d-93c4-46603e1f9ee0" width="50%" />
+
 
 # Task 4: Resource Scaling Estimation
 
