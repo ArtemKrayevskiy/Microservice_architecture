@@ -92,3 +92,85 @@ This will start the apps and in the terminal after 10 seconds you will see somet
 
 
 We can see that each 10 seconds scheduelr sends one of the random phrases to our business_logic service and gets a response
+
+# Logging/Alerting and Celery
+
+## Data Components
+
+### Redis
+
+   Role: Celery message broker/backend
+   Port: 6379
+   Handles: All task queueing between Web ↔ Worker
+### InfluxDB
+
+   Port: 8086
+   Data:
+   interaction measurements:
+   Web access logs (sync)
+   Processing results (async)
+   Tags: service, endpoint, status, result
+
+
+
+# Logging/Alerting and Celery
+
+## Data Components
+
+### Redis
+
+   - Role: Celery message broker/backend
+   - Port: 6379
+   - Handles: All task queueing between Web ↔ Worker
+### InfluxDB
+
+   - Port: 8086
+   - Data:
+   - Web access logs (sync)
+   - Processing results (async)
+
+## Alert Generation
+
+### Trigger Conditions:
+- Invalid input types (sync validation)
+- Personal data detection (async)
+- Fraud patterns (async)
+### Mechanism:
+- Files written to mounted volume (./error_reports)
+- Format: [type]_[timestamp].txt
+- Contents: Timestamp, alert type, description
+
+## Celery Worker - Asynchronous
+
+# Queue: processing
+# Concurrency: 2 workers
+# Tasks:
+- process_text_task:
+   - Spam classification
+   - Personal data detection
+   - Alert generation
+   - Result logging to InfluxDB
+
+On the diagram below you can see the general architecrure of the app:
+
+![diagram](https://github.com/user-attachments/assets/7d61f94b-8a92-441d-93c4-46603e1f9ee0)
+
+# Task 4: Resource Scaling Estimation
+
+## 10 Simultaneous Connections
+- At this scale, the current configuration is sufficient:
+- Web Service can handle these with its default worker setup.
+- Celery Worker with 2 concurrent workers can process tasks in the background without noticeable delay.
+- Redis and InfluxDB usage remains minimal.
+
+## 50 Simultaneous Connections
+- Web Service should be scaled to 2–4 worker processes to handle incoming HTTP requests without latency.
+- Celery Worker concurrency should be increased to 4–6 workers to keep up with background tasks.
+- Redis may require tuning to handle increased message throughput.
+- InfluxDB write load increases, but remains manageable.
+
+## 100 and more simultaneous Connections
+- Web Service should scale horizontally (for example, these might be some orchestration tools like Kubernetes) to multiple instances behind a load balancer.
+- Celery Workers need to scale vertically (higher concurrency) or horizontally (more containers).
+- Redis should be monitored for memory and connection limits.
+- InfluxDB might be changed to some more powerful DB.
