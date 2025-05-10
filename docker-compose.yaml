@@ -1,20 +1,48 @@
 version: '3.12'
+
 services:
-  web: 
+  influxdb:
+    image: influxdb:2.7
+    container_name: influxdb
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb-data:/var/lib/influxdb2
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=admin123
+      - DOCKER_INFLUXDB_INIT_ORG=my-org
+      - DOCKER_INFLUXDB_INIT_BUCKET=logs
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=my-super-token
+    networks:
+      - app-net
+
+  web:
     build:
-      context: ./business_service  
-      dockerfile: Dockerfile 
+      context: ./Business_service
+      dockerfile: Dockerfile
     image: my-fastapi-app-compose:latest
     container_name: fastapi_web_server
     ports:
       - "8000:8000"
+    volumes:
+      - ./error_reports:/app/error_reports
+    environment:
+      - INFLUXDB_URL=http://influxdb:8086
+      - INFLUXDB_TOKEN=my-super-token
+      - INFLUXDB_ORG=my-org
+      - INFLUXDB_BUCKET=logs
+      - ALERTS_DIR=/app/error_reports
     networks:
       - app-net
+    depends_on:
+      - influxdb
 
-  scheduler:  
+  scheduler:
     build:
-      context: ./Scheduler  
-      dockerfile: Dockerfile 
+      context: ./Scheduler
+      dockerfile: Dockerfile
     image: my-scheduler-app-compose:latest
     container_name: scheduler_caller
     environment:
@@ -24,6 +52,37 @@ services:
     networks:
       - app-net
 
+  redis:
+    image: redis:7.2
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - app-net
+
+  worker:
+    volumes:
+      - ./error_reports:/app/error_reports
+    build:
+      context: ./Business_service
+      dockerfile: Dockerfile
+    image: my-celery-worker-app:latest
+    container_name: celery_worker
+    command: celery -A celery_app worker --loglevel=info -Q processing --concurrency=2
+    depends_on:
+      - redis
+      - influxdb
+    environment:
+      - INFLUXDB_URL=http://influxdb:8086
+      - INFLUXDB_TOKEN=my-super-token
+      - INFLUXDB_ORG=my-org
+      - INFLUXDB_BUCKET=logs
+    networks:
+      - app-net
+
 networks:
   app-net:
     driver: bridge
+
+volumes:
+  influxdb-data:

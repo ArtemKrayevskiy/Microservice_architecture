@@ -17,7 +17,8 @@ sample_texts = [
     "Act now to claim your free reward.",
     "Hello, can we reschedule our meeting?",
     "Earn money from home with this simple trick!",
-    "Looking forward to our catch-up call later!"
+    "Looking forward to our catch-up call later!", 
+    1245143514, "My email is user@example.com"
 ]
 
 @asynccontextmanager

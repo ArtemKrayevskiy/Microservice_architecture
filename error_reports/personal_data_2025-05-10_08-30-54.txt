@@ -1,0 +1,3 @@
+Time: 2025-05-10_08-30-54
+Type: personal_data
+Description: Email in: 'My email is user@example.com'
