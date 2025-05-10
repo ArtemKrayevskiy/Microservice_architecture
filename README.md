@@ -88,4 +88,7 @@ podman-compose up --build
 
 This will start the apps and in the terminal after 10 seconds you will see something like this:
 
+<img width="546" alt="Знімок екрана 2025-04-21 о 13 50 05" src="https://github.com/user-attachments/assets/2f33986f-c815-4e22-bd95-64fea20eb480" />
+
+
 We can see that each 10 seconds scheduelr sends one of the random phrases to our business_logic service and gets a response
